@@ -1,0 +1,301 @@
+---
+title: ""
+output: 
+  pdf_document: 
+    toc: FALSE
+    fig_width: 8
+    fig_height: 3.5
+    fig_caption: yes
+    number_sections: FALSE
+crossref:
+  fig-title: '**Figure**'
+  fig-labels: arabic
+  title-delim: "**.**"
+urlcolor: blue  
+fontsize: 12pt
+geometry: margin = 1 in
+header-includes:
+  - \usepackage{float}
+  - \usepackage{sectsty}
+  - \usepackage{paralist}
+  - \usepackage{setspace}\spacing{1.5}
+  - \usepackage{fancyhdr}
+  - \usepackage{lastpage}
+  - \usepackage{dcolumn}
+  - \usepackage{natbib}\bibliographystyle{agsm}
+  - \usepackage[nottoc, numbib]{tocbibind}
+  - \usepackage{booktabs}
+  - \usepackage{diagbox}
+bibliography: BIOC17 Disinfectants catalase.bib
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+<!-- Cover Page -->
+
+```{=html}
+<!--The title is informative, specific and precise. It gives an accurate preview
+of what the report is about. The name and student number of all authors are 
+given with assigned job description.-->
+```
+```{=tex}
+\pagenumbering{gobble}
+\allsectionsfont{\centering}
+\subsectionfont{\raggedright}
+\subsubsectionfont{\raggedright}
+```
+````{=tex}
+\pagenumbering{gobble}
+\begin{centering}
+\vspace{1cm}
+```{r uni_logo, echo=F, out.width="100%"}
+knitr::include_graphics("BS.png")
+```
+\vspace{1cm}
+
+\Large
+
+\vspace{0.2cm}
+\doublespacing
+{\bf Investigating the Efficacy of Chemical Germicides on Microbial Growth: A Study of Disinfectants and Antiseptics against Gram-negative and Gram-positive Bacteria}
+
+\vspace{0.5 cm}
+\normalsize
+\singlespacing
+
+
+\vspace{1 cm}
+{\bf \large Donglin Que\normalsize(1006741233)}
+
+\vspace{6 cm}
+Last compiled on `r format(Sys.time(), '%B %d, %Y')`
+
+\end{centering}
+````
+
+\newpage
+\pagenumbering{arabic}
+
+\newpage
+
+<!-- load packages -->
+
+```{r setup, include=FALSE, warning=FALSE, message=FALSE}
+# load packages
+library(knitr)
+library(readxl)
+library(tidyverse)
+library(ggplot2)
+library(ggpubr)
+library(ggpmisc)
+library(matrixStats)
+library(captioner)
+library(latex2exp)
+library(xtable)
+library(scales)
+opts_chunk$set(echo = FALSE)
+```
+
+
+### Abstract
+
+<!-- contains Introduction, Research Significance, Methodology, Results, Conclusion -->
+
+Chemical fungicides are important tools for maintaining public health, preventing infection and controlling the spread of microorganisms. Examining disinfectants and antiseptics, this study assesses their efficacy in controlling microbial growth, with a focus on Gram-negative and Gram-positive bacteria (*Escherichia coli* and *Staphylococcus epidermidis*) and the catalase test further differentiated results for both. Bleach showed superior killing effects on *E. coli*, alcohol exhibited decreased efficacy on Gram-negative bacteria, and hydrogen peroxide displayed varied effects on catalase-containing bacteria.
+
+
+### Introduction
+
+<!--This section has a logical organization and moves from general to specific. It provides sufficient background to understand the goal and content of the report. It has a clear explanation of why this work is important and relevant. The last few sentences of this section clearly present the goal of the study.-->
+<!-- assume the reader knows nothing about the GST; start generic then get specific; Introduce lac operon genes; and B-galactosidase and its role in lactose metabolism; explain positive and negative regulation of the lac operon; use references here; Describe the experiment you will perform (intro to methods, again), this time introducing your treatments; End with hypothesis: for each treatment, state expected results, or overall trend-->
+
+Chemical antiseptics, which encompass both antiseptics and disinfectants, play a crucial role in controlling microbial growth to prevent nosocomial infections, maintain public health, and control the transmission of microorganisms [@mcdonnellAntisepticsDisinfectantsActivity1999]. Disinfectants are agents that eliminate target organisms, often used on inanimate objects or surfaces, while antiseptics are employed on living tissues to prevent microorganism reproduction [@mcdonnellAntisepticsDisinfectantsActivity1999].
+
+Ethanol is a commonly used substance in daily life, and exhibits rapid and broad-spectrum antibacterial activity, although it lacks spore-killing effects [@trujilloReversibleInhibitionSpore1970]. Its optimal antimicrobial activity lies within the 60% to 90% concentration range, and lower concentrations of ethanol are more effective against viruses compared to isopropanol, making them commonly used as antiseptics [@blockDisinfectionSterilizationPreservation2001a]. Hydrogen peroxide, often used alongside ethanol, acts as a disinfectant by producing hydroxyl radicals that destroy cells. It is generally more effective against Gram-positive bacteria than Gram-negative bacteria, but the presence of catalase in the latter enhances tolerance at lower concentrations, necessitating higher concentrations and longer contact times for bactericidal effects [@blockDisinfectionSterilizationPreservation2001]. Bleach, a potent and effective disinfectant, contains sodium hypochlorite as its main active ingredient, which can efficiently kill bacteria, fungi, and viruses, making it widely used for disinfecting hard surfaces [@mckennaInhibitionBacterialGrowth1988]. Despite their extensive use in daily life, these three chemical fungicides exhibit varying levels of effectiveness against different bacteria.
+
+Gram staining serves as a rapid method to differentiate bacteria. Gram-positive bacteria appear purple after staining due to their thick peptidoglycan layer and lack of an outer lipid membrane, which prevents the dye from penetrating the cell. Examples of Gram-positive bacteria include all *Staphylococci spp.*, all *Streptococci app.*, and some Listeria species, with *Staphylococcus epidermidis* used in this experiment as a representative Gram-positive bacterium [@silhavyBacterialCellEnvelope2010]. In contrast, Gram-negative bacteria have a thin peptidoglycan layer and possess an outer lipid membrane, protecting them from dye penetration. Common Gram-negative bacteria include *Enterobacter spp.*, *Salmonella spp.*, and Pseudomonas, with *Escherichia coli* being the representative Gram-negative bacterium used in this study.
+
+This experiment focuses on studying common chemical germicides and determining the concentrations required to effectively target bacteria. The results can provide valuable insights for sterilizing laboratories and ensuring food hygiene in daily life. The experiment involved inoculating *E. coli* and *S. epidermidis* in broths containing different fungicides at varying concentrations. A microplate reader was used for automatic data collection and environmental maintenance, while changes in absorbance were measured to determine the inhibitory effects of each fungicide on bacterial growth. Additionally, a catalase test was conducted to assess the inhibitory effect of hydrogen peroxide on bacterial growth.
+
+
+### Results
+
+<!-- 1-2 paragraphs describing the results of your data, and state any observed trends. Include figure number in brackets when referring to data from a figure -->
+
+After preparing the centrifuged and concentrated bacteria in broth solutions, they were added to microplates containing various bactericides. These microplates were then placed in a microplate reader set to run at 37 degrees Celsius. The reader was programmed to shake the samples at 120 rpm and collect absorbance data at 15-minute intervals over a two-hour period. The raw output data from the microplate reader consisted of measurements taken at nine time points for two types of bacteria, each exposed to three different fungicide states, three concentrations, and including blank and negative positive control groups. To obtain the actual absorbance values, we calculated the difference between the measured absorbance value and the blank absorbance value for each concentration and the negative and positive culture groups. Since our primary focus in this experiment was to study the effects of different fungicides and concentrations, rather than considering the time factor, we averaged the output results of the experiment. This allowed us to obtain the actual absorbance values of *E. coli* and *S. epidermidis* under the influence of ethanol, hydrogen peroxide, and bleach, as well as the negative and positive control groups, and the three concentrations of low, medium, and high. Results represented in *Fig. 1*, which includes six sets of data for each of the five categories mentioned.
+
+
+```{r, include=FALSE}
+dif <- read_excel("Disinfectant Summer 2023.xlsx", sheet = "Sheet1")
+dif
+
+# cond_name <- c("postive control", "negative control", "low concentration", "medium concentration", "high  concentration")
+
+blank <- dif[0:9, ]
+pos_control <- dif[10:18, ]
+neg_control <- dif[19:27, ]
+low_concent <- dif[28:36, ]
+mid_concent <- dif[37:45, ]
+hig_concent <- dif[46:54, ]
+
+sub <- function(input){
+  # input[,-1]-blank[,-1]
+  input1 <- input %>% select(Condition)
+  input <- cbind(input1, input[,-1]-blank[,-1])
+}
+
+pos_control <- sub(pos_control)
+neg_control <- sub(neg_control)
+low_concent <- sub(low_concent)
+mid_concent <- sub(mid_concent)
+hig_concent <- sub(hig_concent)
+
+
+# Function to replace negative values with zero
+replace_negatives_with_zero <- function(x) {
+  x[x < 0] <- 0
+  return(x)
+}
+
+# Replace negative values with zero in pos_control and neg_control
+pos_control <- apply(pos_control, c(1, 2), replace_negatives_with_zero)
+neg_control <- apply(neg_control, c(1, 2), replace_negatives_with_zero)
+low_concent <- apply(low_concent, c(1, 2), replace_negatives_with_zero)
+mid_concent <- apply(mid_concent, c(1, 2), replace_negatives_with_zero)
+hig_concent <- apply(hig_concent, c(1, 2), replace_negatives_with_zero)
+
+for (i in 2:nrow(hig_concent)) {
+  hig_concent[i, 1] <- "high  concentration"
+}
+for (i in 2:nrow(mid_concent)) {
+  mid_concent[i, 1] <- "medium concentration"
+}
+for (i in 2:nrow(low_concent)) {
+  low_concent[i, 1] <- "low concentration"
+}
+for (i in 2:nrow(neg_control)) {
+  neg_control[i, 1] <- "negative control"
+}
+for (i in 2:nrow(pos_control)) {
+  pos_control[i, 1] <- "postive control"
+}
+
+dat <- rbind(pos_control, neg_control)
+dat <- rbind(dat, low_concent)
+dat <- rbind(dat, mid_concent)
+dat <- rbind(dat, hig_concent)
+
+
+dif <- as_tibble(dat) %>% select(-`Time (min)`)
+
+colnames(dif)[2:7] <- c("E.coli Bleach", "S.epidermidis Bleach", "E.coli Hydrogen Peroxide", "S.epidermidis Hydrogen Peroxide", "E.coli Ethanol", "S.epidermidis Ethanol")
+dif
+
+```
+
+```{r, include=FALSE}
+# Define the desired order of conditions
+##desired_order <- c("blank", "high concentration", "medium concentration", "low concentration", "negative control", "positive control")
+
+# Convert "Condition" to a factor with desired order
+##dif$Condition <- factor(dif$Condition, levels = desired_order)
+
+numeric_cols <- c("E.coli Bleach", "S.epidermidis Bleach", "E.coli Hydrogen Peroxide", "S.epidermidis Hydrogen Peroxide", "E.coli Ethanol", "S.epidermidis Ethanol")
+dif[numeric_cols] <- lapply(dif[numeric_cols], function(x) as.numeric(as.character(x)))
+
+dif
+
+result <- aggregate(. ~ Condition, data = dif, FUN = mean)
+result
+
+##x <- c("blank", "high concentration", "medium concentration", "low concentration", "negative control", "postive control")
+##x
+
+##result <- result %>% slice(match(x, Condition))
+##result
+
+##result <- result %>% arrange(match(Condition, x))
+##result
+
+##dif$Condition <- factor(dif$Condition, levels = c("blank", "low concentration", "medium concentration", "high concentration", "negative control", "positive control"))
+##result
+```
+
+```{r, include=FALSE}
+result %>% pivot_longer(-'Condition', names_to = "Bacteria", values_to = "Value") -> result
+result
+```
+
+```{r, fig.width = 10, include=FALSE}
+ggplot(result, aes(x = Condition, y = Value, fill = Bacteria)) + geom_col(position = "dodge")
+```
+
+```{r, fig.height = 8.5, fig.width = 6.5, include=FALSE}
+
+ggplot(result, aes(x = fct_relevel(Condition, c("blank", "negative control", "postive control", "low concentration", "medium concentration", "high concentration")), y = Value, fill = Bacteria)) + 
+  geom_col() +
+  theme(legend.position = "none") + 
+  facet_wrap(~Bacteria, ncol = 1, scales = "free") +
+  labs(x = TeX("Conditions"), y = TeX("$OD_{550}$")) +
+  scale_x_discrete(labels = wrap_format(10))
+
+# ggplot(result, aes(x = Condition, y = Value, fill = Bacteria)) + geom_col(position = "dodge") + facet_wrap(~Condition, ncol = 1, scales = "free")
+
+```
+
+
+
+```{r, fig.width = 9, fig.height = 4, fig.cap = " **Absorbance Performance of *E. coli* and *S. epidermidis* under Different Chemical Germicides Concentrations** This figure illustrates the absorbance performance of *Escherichia coli* and *Staphylococcus epidermidis* under various fungicide concentrations, including bleach, ethanol, and hydrogen peroxide. The figure presents six sets of data, with the upper row representing *E. coli* and the lower row representing *S. epidermidis*. In each specific germicide group, the x-axis shows the actual absorbance value at a wavelength of 550nm, while the y-axis displays different groups. These groups include the high-concentration group, medium-concentration group, low-concentration group, positive control group, and negative control group. For bleach, the high, medium, and low concentrations correspond to bacterial growth environments containing 4.0%, 1.0%, and 0.5% bleach, respectively. In the case of ethanol, the high, medium, and low concentration groups consist of 70%, 50%, and 25% ethanol reagents, respectively. Lastly, the hydrogen peroxide group has concentrations of high, medium, and low, representing 0.5%, 0.1%, and 0.05%, respectively. The positive control group denotes the group without any added fungicide, allowing bacteria to grow normally. The negative control group, on the other hand, does not contain any bacteria.", echo=FALSE, warning = FALSE, message = FALSE , results='hide'}
+
+ggplot(result, aes(x = fct_relevel(Condition, c("negative control", "postive control", "low concentration", "medium concentration", "high  concentration")), y = Value, fill = Bacteria)) + geom_col() + 
+  theme(legend.position = "none") + 
+  facet_wrap(~Bacteria, scales = "free") +
+    labs(x = TeX("Groups"), y = TeX("Actual Absorbance $OD_{550}$")) +
+    scale_x_discrete(labels = wrap_format(8)) + coord_flip()
+
+# ggplot(result, aes(x = Condition, y = Value, fill = Bacteria)) + geom_col(position = "dodge") + facet_wrap(~Condition, scales = "free")
+
+```
+
+
+As depicted in *Fig. 1*, the effectiveness of bleach in killing *E. coli* is evident across all concentrations. For *S. epidermidis*, the bactericidal effect is similar for low (0.5%) and medium (1.0%) concentrations of bleach, significantly reducing bacterial activity compared to the positive control group. However, a higher concentration of bleach (4%) further reduces bacterial activity. In contrast, ethanol as a preservative does not exhibit a significant bactericidal effect on *E. coli*. Among the three concentrations tested, the lowest concentration (25%) shows the most noticeable bactericidal effect, followed by medium (50%) and high (70%) concentrations. On the other hand, all three concentrations of ethanol have similar bactericidal effects on *S. epidermidis*, effectively killing most of the bacteria. The bactericidal effect of hydrogen peroxide on *E. coli* decreases with increasing concentration: the highest concentration (0.5%) performs better than the medium concentration (0.1%), which, in turn, is more effective than the low concentration (0.05%). However, it's worth noting that *E. coli* grown in the low concentration hydrogen peroxide fungicide shows a higher absorbance compared to the positive control group, indicating some attention is required in this case. Unlike *E. coli*, *S. epidermidis* is most inhibited in growth at low concentrations of hydrogen peroxide, with higher and moderate concentrations having lesser effects. Even in the group with the least impact among the three different concentrations of fungicides, the absorbance is not higher than that of the positive control group.
+
+
+\begin{table}[ht]
+\caption{Catalase test result} 
+\centering
+\begin{tabular}{ccccc}
+\toprule
+ \diagbox{Observation}{Bacteria} & \emph{E. coli} & \emph{S. epidermidis} \\ \midrule
+  Description & Small amount of bubbles & Lots of bubbles \\ \bottomrule
+\end{tabular}
+\end{table}
+
+
+
+The test for catalase is to add an equal amount of 3% hydrogen peroxide solution into the liquid culture containing *E. coli* and *S. epidermidis*, and judge whether the bacteria are producers of catalase by observing the speed and number of bubbles produced. The observation results are shown in *Table 1*, the number of air bubbles produced by *S. epidermidis* is far more than that of *E. coli*.
+
+
+
+
+
+### Discussion
+
+<!-- Interpret data, discuss trend and reasoning for it. Use references to support the validity of your conclusions. Identify outliers and error analysis (if multiple factors lead to errors, describe as many as you can!) -->
+
+According to *Fig. 1*, our experimental results show that bleach has the best inhibitory effect on *E. coli*,, and the effective concentration is less than 0.5%. Ethanol has a certain bactericidal effect on *E. coli*,, and the inhibitory effect is the best at a concentration of 25%. The effective concentration of hydrogen peroxide solution needs to be 0.5% to have a significant effect. The results of the bleach experiment were as expected, and *E. coli*, could not survive at a much lower concentration than our experiment [@kinsingerEfficacyPostharvestRinsing2017]. The effective concentration of ethanol is not consistent with the literature data. It is difficult for wild-type *E. coli* to tolerate an ethanol concentration of more than 6.5% [@horinouchiTranscriptomeAnalysisParallelevolved2010], but our *E. coli* has greater growth at medium and high concentrations, which may be due to differences between different strains [@sawadaGrowthInhibitoryLethal1987]. The effective concentration of hydrogen peroxide was also as expected, since we used a lower concentration than 1mM in the literature, which can partly explain its effectiveness only at high concentrations [@imlayMutagenesisStressResponses1987].
+
+
+For *S. epidermidis*, bleach has a good bactericidal effect at any concentration, but the best effective concentration should be higher than 4%. Any concentration of ethanol has a bactericidal effect, and the effective concentration can be regarded as 25%. The optimum effective concentration of hydrogen peroxide should not be higher than 0.05%. According to the literature, alcohol and hydrogen peroxide with a concentration of 3% and 5% can quickly eradicate *S. epidermidis* biofilm, and a low dose (0.0219%) of a disinfectant containing sodium hypochlorite can also achieve a very good bactericidal effect, so it can be considered that our experimental data are in line with expectations [@EffectHydrogenPeroxide2021; @linebackHydrogenPeroxideSodium2018]. Catalase is a common enzyme protein, which is mainly involved in decomposing harmful oxidizing substances such as hydrogen peroxide. Both *E. coli* and *S. epidermidis* were positive for catalase, but according to the experimental results in Table 1, *S. epidermidis* decomposed more hydrogen peroxide. This explains why *S. epidermidis* grew better than *E. coli* at high concentrations of hydrogen peroxide.
+
+Overall, the three fungicides had different effects on the growth of Gram-negative and Gram-positive organisms. For Gram-negative bacteria, the multilayered cell wall structure can well protect it from most low-dose fungicides. At this point the growth of Gram-positive bacteria is often more challenged in the absence of corresponding enzymes.
+
+
+
+
+\newpage
+
+### Reference
+
+\small
